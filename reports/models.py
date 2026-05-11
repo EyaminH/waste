@@ -16,12 +16,14 @@ class WasteReport(models.Model):
         ('PENDING', 'Pending'),
         ('COLLECTED', 'Collected'),
         ('VERIFIED', 'Verified'),
+        ('REJECTED', 'Rejected'),
     )
 
     location = models.CharField(max_length=500)
     waste_type = models.CharField(max_length=20, choices=WASTE_TYPES)
     amount = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    rejection_reason = models.TextField(blank=True, null=True)
     
     reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reported_waste')
     collector = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='collected_waste')

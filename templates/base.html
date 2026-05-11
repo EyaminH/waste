@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Waste Management{% endblock %}</title>
+    <title>{% block title %}EcoWaste{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
                 extend: {
                     colors: {
                         emerald: {
@@ -21,52 +27,103 @@
                             700: '#047857',
                             800: '#065f46',
                             900: '#064e3b',
-                            950: '#022c22',
                         }
                     }
                 }
             }
         }
     </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen">
-    <nav class="bg-white border-b border-gray-200">
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+    {% load static %}
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-lg border-b border-gray-100 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="/" class="text-xl font-bold text-emerald-600">Waste Management App</a>
-                    </div>
+            <div class="flex justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2 group">
+                        <img src="{% static 'images/logo.png' %}" alt="EcoWaste Logo" class="h-12 w-auto object-contain transform group-hover:scale-105 transition-transform duration-300">
+                    </a>
                 </div>
-                <div class="flex items-center space-x-4">
+
+                <!-- Nav Links & Actions -->
+                <div class="flex items-center space-x-3">
                     {% if user.is_authenticated %}
-                        <span class="text-gray-700">Hello, {{ user.username }} ({{ user.get_role_display }})</span>
+                        
+                        <a href="{% url 'dashboard' %}" class="flex items-center space-x-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-2 rounded-xl font-bold text-sm hover:from-emerald-600 hover:to-teal-600 transition-all shadow-md transform hover:-translate-y-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                            <span>Dashboard</span>
+                        </a>
+
+                        <a href="{% url 'leaderboard' %}" class="hidden sm:block rounded-full bg-gradient-to-br text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50">Leaderboard</a>
+
+                        
+                        <div class="hidden sm:flex items-center space-x-2 bg-gray-100 rounded-xl px-3 py-2">
+                            <div class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 flex items-center justify-center text-white text-xs font-black">
+                                {{ user.username|first|upper }}
+                            </div>
+                            <span class="text-sm font-semibold text-gray-700">{{ user.username }}</span>
+                            <span class="text-xs font-medium text-white bg-emerald-500 px-2 py-0.5 rounded-full">{{ user.get_role_display }}</span>
+                        </div>
+                        
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="text-gray-500 hover:text-emerald-600">Logout</button>
+                            <button type="submit" class="text-sm font-medium text-gray-500 hover:text-red-500 transition-colors px-3 py-2 rounded-lg hover:bg-red-50">Logout</button>
                         </form>
                     {% else %}
-                        <a href="{% url 'login' %}" class="text-gray-500 hover:text-emerald-600">Login</a>
-                        <a href="{% url 'register' %}" class="bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700">Register</a>
+                        <a href="{% url 'leaderboard' %}" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50">Leaderboard</a>
+                        <a href="{% url 'login' %}" class="text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-colors px-4 py-2 rounded-lg hover:bg-gray-50">Log In</a>
+                        <a href="{% url 'register' %}" class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-5 py-2 rounded-xl font-bold text-sm hover:from-emerald-600 hover:to-teal-600 hover:shadow-md transition-all transform hover:-translate-y-0.5 shadow-sm">
+                            Get Started
+                        </a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {% if messages %}
-            <div class="mb-4">
-                {% for message in messages %}
-                    <div class="p-4 rounded-md {% if message.tags == 'error' %}bg-red-50 text-red-800{% elif message.tags == 'success' %}bg-emerald-50 text-emerald-800{% else %}bg-blue-50 text-blue-800{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        
+    <!-- Flash Messages -->
+    {% if messages %}
+        <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4">
+            {% for message in messages %}
+                <div class="flex items-center p-4 mb-2 rounded-2xl shadow-sm border font-medium text-sm
+                    {% if message.tags == 'error' %}bg-red-50 text-red-800 border-red-100
+                    {% elif message.tags == 'success' %}bg-emerald-50 text-emerald-800 border-emerald-100
+                    {% elif message.tags == 'warning' %}bg-yellow-50 text-yellow-800 border-yellow-100
+                    {% else %}bg-blue-50 text-blue-800 border-blue-100{% endif %}">
+                    {% if message.tags == 'error' %}
+                        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                    {% elif message.tags == 'success' %}
+                        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    {% else %}
+                        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                    {% endif %}
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow">
         {% block content %}
         {% endblock %}
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-2">
+                <img src="{% static 'images/logo.png' %}" alt="EcoWaste" class="h-7 w-auto object-contain opacity-70">
+                <span class="text-sm text-gray-400 font-medium">EcoWaste &copy; 2026</span>
+            </div>
+            <p class="text-xs text-gray-400">Together for a cleaner planet 🌿</p>
+        </div>
+    </footer>
 </body>
 </html>

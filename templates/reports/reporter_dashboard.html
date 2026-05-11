@@ -1,76 +1,111 @@
 {% extends "base.html" %}
 
-{% block title %}Reporter Dashboard - Waste Management{% endblock %}
+{% block title %}Reporter Dashboard - EcoWaste{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
     <!-- Sidebar -->
-    <div class="md:col-span-1 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Reporter Menu</h3>
-        <ul class="space-y-2">
-            <li><a href="{% url 'reporter_dashboard' %}" class="text-emerald-600 font-medium block p-2 bg-emerald-50 rounded">Dashboard</a></li>
-            <li><a href="{% url 'leaderboard' %}" class="text-gray-600 hover:text-emerald-600 block p-2 hover:bg-gray-50 rounded">Leaderboard</a></li>
-            <li class="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-500">Points: <span class="font-bold text-emerald-600">{{ user.points }}</span></li>
+    <div class="md:col-span-1 bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-gray-100">
+        <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            Reporter Menu
+        </h3>
+        <ul class="space-y-3">
+            <li><a href="{% url 'reporter_dashboard' %}" class="text-emerald-700 font-bold block p-3 bg-gradient-to-r from-emerald-100 to-emerald-50 rounded-xl shadow-sm transition-transform hover:-translate-y-0.5">Dashboard</a></li>
+            <li><a href="{% url 'leaderboard' %}" class="text-gray-600 hover:text-emerald-600 font-medium block p-3 hover:bg-gray-50 rounded-xl transition-all">Leaderboard</a></li>
+            
+            <li class="mt-6 pt-6 border-t border-gray-100">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-500 p-4 rounded-xl text-white shadow-md transform hover:scale-105 transition-transform">
+                    <p class="text-sm font-medium opacity-90">Total Points</p>
+                    <p class="text-3xl font-black">{{ user.points }}</p>
+                </div>
+            </li>
         </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="md:col-span-3 space-y-6">
+    <div class="md:col-span-3 space-y-8">
         <!-- Submit Report Form -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Submit Waste Report</h2>
-            <form method="POST" class="space-y-4">
+        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-100 rounded-full mix-blend-multiply opacity-50 blur-2xl"></div>
+
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Submit Waste Report</h2>
+            <form method="POST" class="space-y-6 relative z-10">
                 {% csrf_token %}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
-                        <label for="{{ form.location.id_for_label }}" class="block text-sm font-medium text-gray-700">Location</label>
+                        <label for="{{ form.location.id_for_label }}" class="block text-sm font-bold text-gray-700 mb-1">Location</label>
                         {{ form.location }}
                     </div>
                     <div>
-                        <label for="{{ form.waste_type.id_for_label }}" class="block text-sm font-medium text-gray-700">Waste Type</label>
+                        <label for="{{ form.waste_type.id_for_label }}" class="block text-sm font-bold text-gray-700 mb-1">Waste Type</label>
                         {{ form.waste_type }}
                     </div>
                     <div>
-                        <label for="{{ form.amount.id_for_label }}" class="block text-sm font-medium text-gray-700">Amount</label>
+                        <label for="{{ form.amount.id_for_label }}" class="block text-sm font-bold text-gray-700 mb-1">Amount / Details</label>
                         {{ form.amount }}
                     </div>
                 </div>
-                <button type="submit" class="w-full md:w-auto bg-emerald-600 text-white px-6 py-2 rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:from-emerald-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transform transition-all hover:-translate-y-1">
                     Submit Report (+10 Points)
                 </button>
             </form>
         </div>
 
         <!-- Past Reports -->
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Your Past Reports</h2>
+        <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6 flex items-center">
+                <svg class="w-7 h-7 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Your Past Reports
+            </h2>
             {% if reports %}
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4">
                     {% for report in reports %}
-                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:shadow-lg hover:border-emerald-200 transition-all transform hover:-translate-y-1">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h4 class="text-lg font-medium text-gray-900">{{ report.get_waste_type_display }}</h4>
-                                    <p class="text-sm text-gray-500">{{ report.location }}</p>
-                                    <p class="text-sm text-gray-500">Amount: {{ report.amount }}</p>
+                                    <h4 class="text-lg font-bold text-gray-900">{{ report.get_waste_type_display }}</h4>
+                                    <p class="text-sm text-gray-600 font-medium"><svg class="w-4 h-4 inline mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>{{ report.location }}</p>
+                                    <p class="text-sm text-gray-500 mt-1">Amount: {{ report.amount }}</p>
                                 </div>
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                    {% if report.status == 'PENDING' %}bg-yellow-100 text-yellow-800
-                                    {% elif report.status == 'COLLECTED' %}bg-blue-100 text-blue-800
-                                    {% else %}bg-emerald-100 text-emerald-800{% endif %}">
+                                <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm
+                                    {% if report.status == 'PENDING' %}bg-yellow-100 text-yellow-800 border border-yellow-200
+                                    {% elif report.status == 'COLLECTED' %}bg-blue-100 text-blue-800 border border-blue-200
+                                    {% elif report.status == 'REJECTED' %}bg-red-100 text-red-800 border border-red-200
+                                    {% else %}bg-emerald-100 text-emerald-800 border border-emerald-200{% endif %}">
                                     {{ report.status }}
                                 </span>
                             </div>
-                            <div class="mt-2 text-xs text-gray-400">
-                                Submitted on: {{ report.created_at|date:"M d, Y H:i" }}
+                            
+                            {% if report.status == 'REJECTED' and report.rejection_reason %}
+                                <div class="mt-3 p-3 bg-red-50 border border-red-100 rounded-xl">
+                                    <p class="text-sm text-red-800"><span class="font-bold">Rejection Reason:</span> {{ report.rejection_reason }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-400 font-medium">
+                                Submitted on: {{ report.created_at|date:"M d, Y h:i A" }}
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="text-gray-500 italic">You haven't submitted any reports yet.</p>
+                <div class="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                    <p class="text-gray-500 font-medium">You haven't submitted any reports yet.</p>
+                </div>
             {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+    // Style form inputs dynamically
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input[type="text"], input[type="password"], select');
+        inputs.forEach(input => {
+            input.classList.add('block', 'w-full', 'px-4', 'py-3', 'border', 'border-gray-200', 'rounded-xl', 'text-gray-900', 'focus:outline-none', 'focus:ring-2', 'focus:ring-emerald-500', 'focus:border-transparent', 'transition-shadow', 'shadow-sm');
+        });
+    });
+</script>
 {% endblock %}

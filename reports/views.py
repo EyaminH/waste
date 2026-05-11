@@ -52,7 +52,12 @@ def collector_dashboard(request):
         form = FeedbackForm()
         
     pending_reports = WasteReport.objects.filter(status='PENDING').order_by('-created_at')
-    return render(request, 'reports/collector_dashboard.html', {'pending_reports': pending_reports, 'form': form})
+    my_collections = WasteReport.objects.filter(collector=request.user).order_by('-updated_at')
+    return render(request, 'reports/collector_dashboard.html', {
+        'pending_reports': pending_reports, 
+        'my_collections': my_collections,
+        'form': form
+    })
 
 @admin_required
 def admin_dashboard(request):
@@ -83,6 +88,20 @@ def admin_dashboard(request):
                  
         return redirect('admin_dashboard')
 
+    # Handle Report Rejection
+    if request.method == 'POST' and 'reject_report' in request.POST:
+        report_id = request.POST.get('report_id')
+        rejection_reason = request.POST.get('rejection_reason', '')
+        report = get_object_or_404(WasteReport, id=report_id, status='COLLECTED')
+        
+        with transaction.atomic():
+            report.status = 'REJECTED'
+            report.rejection_reason = rejection_reason
+            report.save()
+            messages.success(request, 'Report collection rejected.')
+                 
+        return redirect('admin_dashboard')
+
     pending_collectors = CustomUser.objects.filter(role='COLLECTOR', status='PENDING')
     collected_reports = WasteReport.objects.filter(status='COLLECTED').order_by('-updated_at')
     
@@ -92,5 +111,9 @@ def admin_dashboard(request):
     })
 
 def leaderboard(request):
-    top_users = CustomUser.objects.exclude(role='ADMIN').order_by('-points')[:50]
-    return render(request, 'reports/leaderboard.html', {'top_users': top_users})
+    top_reporters = CustomUser.objects.filter(role='REPORTER').order_by('-points')[:50]
+    top_collectors = CustomUser.objects.filter(role='COLLECTOR').order_by('-points')[:50]
+    return render(request, 'reports/leaderboard.html', {
+        'top_reporters': top_reporters,
+        'top_collectors': top_collectors
+    })
