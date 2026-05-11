@@ -11,104 +11,133 @@
         <p class="mt-4 max-w-xl text-lg text-gray-500 mx-auto">Top contributors keeping the environment clean. Every report and collection counts!</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         
         <!-- Reporters Leaderboard -->
-        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-500 p-6">
-                <h2 class="text-2xl font-extrabold text-white flex items-center">
-                    <svg class="w-7 h-7 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
-                    Top Reporters
-                </h2>
-                <p class="text-emerald-100 text-sm mt-1">Earn 10 points per verified report</p>
+        <div class="bg-white rounded-[2rem] shadow-2xl shadow-emerald-900/5 border border-gray-100 overflow-hidden relative group" data-aos="fade-right">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 p-8 relative overflow-hidden">
+                <!-- Abstract pattern -->
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-2xl font-black text-white flex items-center tracking-tight">
+                        <div class="p-2.5 bg-white/20 backdrop-blur-md rounded-xl mr-3">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        Impact Drivers
+                    </h2>
+                    <p class="text-emerald-100/80 text-sm mt-1 font-medium">Top Waste Reporters by total impact</p>
+                </div>
             </div>
 
             {% if top_reporters %}
-                <div class="divide-y divide-gray-100">
+                <div class="divide-y divide-gray-50 px-4 pb-6 mt-2">
                     {% for u in top_reporters %}
-                        <div class="flex items-center px-6 py-4 hover:bg-emerald-50 transition-colors {% if u == user %}bg-emerald-50{% endif %}">
-                            <div class="w-10 text-center">
+                        <div class="flex items-center px-4 py-4 rounded-2xl hover:bg-gray-50 transition-all duration-300 group/row {% if u == user %}bg-emerald-50/50 ring-1 ring-emerald-100{% endif %}"
+                             data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-delay="50">
+                            
+                            <!-- Rank Indicator -->
+                            <div class="w-12 h-12 flex items-center justify-center relative shrink-0">
                                 {% if forloop.counter == 1 %}
-                                    <span class="text-2xl">🥇</span>
+                                    <div class="absolute inset-0 bg-yellow-100 rounded-2xl rotate-6 group-hover/row:rotate-12 transition-transform"></div>
+                                    <span class="relative text-2xl">🥇</span>
                                 {% elif forloop.counter == 2 %}
-                                    <span class="text-2xl">🥈</span>
+                                    <div class="absolute inset-0 bg-gray-100 rounded-2xl -rotate-3 group-hover/row:-rotate-6 transition-transform"></div>
+                                    <span class="relative text-2xl">🥈</span>
                                 {% elif forloop.counter == 3 %}
-                                    <span class="text-2xl">🥉</span>
+                                    <div class="absolute inset-0 bg-orange-100 rounded-2xl rotate-2 group-hover/row:rotate-6 transition-transform"></div>
+                                    <span class="relative text-2xl">🥉</span>
                                 {% else %}
-                                    <span class="text-sm font-bold text-gray-400">#{{ forloop.counter }}</span>
+                                    <span class="text-lg font-black text-gray-300 group-hover/row:text-emerald-400 transition-colors">#{{ forloop.counter }}</span>
                                 {% endif %}
                             </div>
+
                             <div class="flex-1 ml-4">
-                                <p class="text-sm font-bold text-gray-900">
-                                    {{ u.username }}
+                                <div class="flex items-center gap-2">
+                                    <p class="text-base font-bold text-gray-900 group-hover/row:text-emerald-700 transition-colors">{{ u.username }}</p>
                                     {% if u == user %}
-                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-200 text-emerald-900">You</span>
+                                        <span class="px-2 py-0.5 text-[10px] font-black uppercase bg-emerald-600 text-white rounded-md shadow-sm">YOU</span>
                                     {% endif %}
-                                </p>
+                                </div>
+                                <div class="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                                    <!-- Simple relative visual bar based on total points approximation -->
+                                    <div class="bg-gradient-to-r from-emerald-400 to-emerald-500 h-full rounded-full" style="width: {% widthratio u.points top_reporters.0.points 100 %}%"></div>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-black {% if forloop.counter <= 3 %}bg-emerald-100 text-emerald-800{% else %}bg-gray-100 text-gray-600{% endif %}">
-                                    {{ u.points }} pts
-                                </span>
+
+                            <div class="text-right pl-4">
+                                <span class="text-lg font-black text-gray-800">{{ u.points }} <span class="text-[10px] uppercase text-gray-400 tracking-wide font-bold">pts</span></span>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12 px-6">
-                    <p class="text-gray-400 font-medium">No reporter points yet. Be the first!</p>
-                </div>
+                <div class="text-center py-16 px-6 text-gray-400 italic">No active reports registered yet.</div>
             {% endif %}
         </div>
 
         <!-- Collectors Leaderboard -->
-        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-6">
-                <h2 class="text-2xl font-extrabold text-white flex items-center">
-                    <svg class="w-7 h-7 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    Top Collectors
-                </h2>
-                <p class="text-blue-100 text-sm mt-1">Earn 20 points per verified collection</p>
+        <div class="bg-white rounded-[2rem] shadow-2xl shadow-blue-900/5 border border-gray-100 overflow-hidden relative group" data-aos="fade-left" data-aos-delay="100">
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 relative overflow-hidden">
+                <!-- Abstract pattern -->
+                <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-2xl font-black text-white flex items-center tracking-tight">
+                        <div class="p-2.5 bg-white/20 backdrop-blur-md rounded-xl mr-3">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </div>
+                        Super Collectors
+                    </h2>
+                    <p class="text-blue-100/80 text-sm mt-1 font-medium">Champions of cleanliness and recycling</p>
+                </div>
             </div>
 
             {% if top_collectors %}
-                <div class="divide-y divide-gray-100">
+                <div class="divide-y divide-gray-50 px-4 pb-6 mt-2">
                     {% for u in top_collectors %}
-                        <div class="flex items-center px-6 py-4 hover:bg-blue-50 transition-colors {% if u == user %}bg-blue-50{% endif %}">
-                            <div class="w-10 text-center">
+                        <div class="flex items-center px-4 py-4 rounded-2xl hover:bg-gray-50 transition-all duration-300 group/row {% if u == user %}bg-blue-50/50 ring-1 ring-blue-100{% endif %}"
+                             data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-delay="50">
+                            
+                            <!-- Rank -->
+                            <div class="w-12 h-12 flex items-center justify-center relative shrink-0">
                                 {% if forloop.counter == 1 %}
-                                    <span class="text-2xl">🥇</span>
+                                    <div class="absolute inset-0 bg-yellow-100 rounded-2xl rotate-6 group-hover/row:rotate-12 transition-transform"></div>
+                                    <span class="relative text-2xl">🥇</span>
                                 {% elif forloop.counter == 2 %}
-                                    <span class="text-2xl">🥈</span>
+                                    <div class="absolute inset-0 bg-gray-100 rounded-2xl -rotate-3 group-hover/row:-rotate-6 transition-transform"></div>
+                                    <span class="relative text-2xl">🥈</span>
                                 {% elif forloop.counter == 3 %}
-                                    <span class="text-2xl">🥉</span>
+                                    <div class="absolute inset-0 bg-orange-100 rounded-2xl rotate-2 group-hover/row:rotate-6 transition-transform"></div>
+                                    <span class="relative text-2xl">🥉</span>
                                 {% else %}
-                                    <span class="text-sm font-bold text-gray-400">#{{ forloop.counter }}</span>
+                                    <span class="text-lg font-black text-gray-300 group-hover/row:text-blue-500 transition-colors">#{{ forloop.counter }}</span>
                                 {% endif %}
                             </div>
+
                             <div class="flex-1 ml-4">
-                                <p class="text-sm font-bold text-gray-900">
-                                    {{ u.username }}
+                                <div class="flex items-center gap-2">
+                                    <p class="text-base font-bold text-gray-900 group-hover/row:text-blue-700 transition-colors">{{ u.username }}</p>
                                     {% if u == user %}
-                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-blue-200 text-blue-900">You</span>
+                                        <span class="px-2 py-0.5 text-[10px] font-black uppercase bg-blue-600 text-white rounded-md shadow-sm">YOU</span>
                                     {% endif %}
-                                </p>
+                                </div>
+                                <div class="w-full bg-gray-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-blue-400 to-indigo-500 h-full rounded-full" style="width: {% widthratio u.points top_collectors.0.points 100 %}%"></div>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-black {% if forloop.counter <= 3 %}bg-blue-100 text-blue-800{% else %}bg-gray-100 text-gray-600{% endif %}">
-                                    {{ u.points }} pts
-                                </span>
+
+                            <div class="text-right pl-4">
+                                <span class="text-lg font-black text-gray-800">{{ u.points }} <span class="text-[10px] uppercase text-gray-400 tracking-wide font-bold">pts</span></span>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12 px-6">
-                    <p class="text-gray-400 font-medium">No collector points yet. Be the first!</p>
-                </div>
+                <div class="text-center py-16 px-6 text-gray-400 italic">No active collectors found yet.</div>
             {% endif %}
         </div>
-        
     </div>
+
 </div>
 {% endblock %}

@@ -24,98 +24,163 @@
 
     <!-- Main Content -->
     <div class="md:col-span-3 space-y-8">
+        
+        <!-- Stats and Greeting Row -->
+        <div class="flex flex-col md:flex-row justify-between gap-8" data-aos="fade-up">
+            <div class="flex-grow">
+                <h1 class="text-3xl font-black text-gray-900">Collection Dashboard</h1>
+                <p class="text-gray-500 font-medium mt-1">Help keep our cities clean, and rack up reward points! 🌍</p>
+            </div>
+
+            <!-- Small Stats Dashboard Box for Collector -->
+            {% if my_collections %}
+            <div class="glass-card rounded-2xl border border-gray-100 shadow-lg p-4 flex gap-6 items-center" data-aos="fade-left">
+                <div class="relative w-24 h-24">
+                    <canvas id="collectorPerfChart"></canvas>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Performance</p>
+                    <div class="flex flex-col gap-0.5">
+                        <span class="text-sm font-bold text-gray-700 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> Verified</span>
+                        <span class="text-sm font-bold text-gray-700 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-blue-500"></div> Pending</span>
+                        <span class="text-sm font-bold text-gray-700 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500"></div> Rejected</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
         <!-- Available Waste -->
-        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full mix-blend-multiply opacity-60 blur-2xl"></div>
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-6 relative z-10 flex items-center">
-                <svg class="w-8 h-8 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                Available Waste for Collection
-            </h2>
+        <div class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply opacity-40 blur-3xl"></div>
+            
+            <div class="flex justify-between items-center mb-8 relative z-10">
+                <h2 class="text-2xl font-black text-gray-900 flex items-center">
+                    <div class="p-2.5 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl text-white mr-3 shadow-lg shadow-blue-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    Open for Pickup
+                </h2>
+                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-bold border border-blue-100">{{ pending_reports.count }} available</span>
+            </div>
             
             {% if pending_reports %}
                 <div class="grid grid-cols-1 gap-6 relative z-10">
                     {% for report in pending_reports %}
-                        <div class="bg-gray-50 border border-gray-100 rounded-3xl p-6 hover:shadow-lg hover:border-blue-200 transition-all transform hover:-translate-y-1">
-                            <div class="flex justify-between items-start mb-5">
-                                <div>
-                                    <h3 class="text-xl font-black text-gray-900">{{ report.get_waste_type_display }}</h3>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        <svg class="w-4 h-4 inline text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                        {{ report.location }}
-                                    </p>
-                                    <p class="text-sm text-gray-500 mt-1">Amount: <span class="font-semibold">{{ report.amount }}</span></p>
-                                    <p class="text-xs text-gray-400 mt-2">Reported by <span class="font-medium text-gray-600">{{ report.reporter.username }}</span> on {{ report.created_at|date:"M d, Y" }}</p>
-                                </div>
-                                <span class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-yellow-100 text-yellow-800 border border-yellow-200 shadow-sm">PENDING</span>
-                            </div>
+                        <div class="group relative bg-white border-2 border-gray-50 rounded-3xl p-6 transition-all duration-300 hover:shadow-2xl hover:border-blue-200 transform hover:-translate-y-1 overflow-hidden" data-aos="fade-up">
+                            <div class="absolute top-0 right-0 bg-yellow-400 text-white text-[10px] font-black tracking-widest px-4 py-1 rounded-bl-2xl transform transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">NEW</div>
                             
-                            <!-- Collection Form -->
-                            <form method="POST" class="pt-5 border-t border-gray-100 space-y-3">
-                                {% csrf_token %}
-                                <input type="hidden" name="report_id" value="{{ report.id }}">
-                                <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-1">Collection Notes / Feedback</label>
-                                    {{ form.content }}
+                            <div class="flex flex-col lg:flex-row gap-6">
+                                <!-- Report Info -->
+                                <div class="lg:w-2/5">
+                                    <h3 class="text-xl font-black text-gray-900 mb-1">{{ report.get_waste_type_display }}</h3>
+                                    
+                                    <div class="space-y-3 mt-3">
+                                        <div class="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-xl">
+                                            <svg class="w-5 h-5 text-blue-400 mr-2 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                            <div>
+                                                <span class="block font-bold text-gray-900">Address:</span>
+                                                {{ report.location }}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between px-2 text-sm font-medium text-gray-500">
+                                            <span class="flex items-center gap-1"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg> Qty: <strong class="text-gray-700">{{ report.amount }}</strong></span>
+                                            <span class="text-xs">{{ report.created_at|timesince }} ago</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold px-4 py-3 rounded-xl shadow-md hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all hover:-translate-y-0.5">
-                                    Submit for Verification (+20 pts on approval)
-                                </button>
-                            </form>
+                                
+                                <!-- Action Side -->
+                                <div class="lg:w-3/5 bg-gray-50/50 rounded-2xl p-5 border border-gray-100">
+                                    <form method="POST" class="space-y-4 action-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="report_id" value="{{ report.id }}">
+                                        <div>
+                                            <label class="block text-xs font-black text-gray-500 uppercase tracking-wider mb-1.5">Collection Notes / Action Taken</label>
+                                            {{ form.content }}
+                                        </div>
+                                        <button type="submit" class="submit-action-btn w-full group flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/20 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95">
+                                            <span>Log Collection</span>
+                                            <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 relative z-10">
-                    <svg class="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
-                    <h3 class="text-base font-bold text-gray-500">No pending reports</h3>
-                    <p class="mt-1 text-sm text-gray-400">There are no waste reports waiting to be collected right now.</p>
+                <div class="text-center py-16 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 relative z-10" data-aos="zoom-in">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                        <svg class="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">All Caught Up!</h3>
+                    <p class="mt-1 text-sm text-gray-500">There are currently no pending waste reports.</p>
                 </div>
             {% endif %}
         </div>
         
         <!-- My Collections History -->
-        <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
-            <h2 class="text-2xl font-extrabold text-gray-900 mb-6 flex items-center">
-                <svg class="w-7 h-7 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                My Collections History
-            </h2>
+        <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-black text-gray-900 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    Collection Log
+                </h2>
+                {% if my_collections %}
+                <span class="text-xs font-black bg-gray-100 px-3 py-1.5 rounded-full text-gray-500">{{ my_collections.count }} entries</span>
+                {% endif %}
+            </div>
             
             {% if my_collections %}
-                <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 gap-4 relative">
                     {% for item in my_collections %}
-                        <div class="bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h4 class="text-lg font-bold text-gray-900">{{ item.get_waste_type_display }}</h4>
-                                    <p class="text-sm text-gray-600 mt-1">{{ item.location }}</p>
-                                    <p class="text-xs text-gray-400 mt-2 font-medium">Submitted: {{ item.updated_at|date:"M d, Y h:i A" }}</p>
+                        <div class="group relative bg-gray-50 hover:bg-white border border-gray-100 hover:border-blue-100 rounded-2xl p-5 transition-all duration-300 hover:shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+                            
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="text-lg font-extrabold text-gray-900">{{ item.get_waste_type_display }}</h4>
+                                    <span class="text-gray-300 font-light text-sm">•</span>
+                                    <p class="text-xs text-gray-500 font-bold tracking-wider">{{ item.updated_at|date:"M d, g:i a" }}</p>
                                 </div>
-                                {% if item.status == 'COLLECTED' %}
-                                    <span class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-blue-100 text-blue-800 border border-blue-200">Pending Verification</span>
+                                <p class="text-sm text-gray-500 font-medium flex items-center"><svg class="w-4 h-4 mr-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>{{ item.location }}</p>
+
+                                {% if item.status == 'REJECTED' and item.rejection_reason %}
+                                    <div class="mt-3 px-3 py-2 bg-red-50 border border-red-100/50 rounded-lg text-xs text-red-700 font-medium">
+                                        ⚠️ Rejected: {{ item.rejection_reason }}
+                                    </div>
                                 {% elif item.status == 'VERIFIED' %}
-                                    <span class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Verified</span>
-                                {% elif item.status == 'REJECTED' %}
-                                    <span class="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-red-100 text-red-800 border border-red-200">✕ Rejected</span>
+                                    <div class="mt-2 inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border border-emerald-100">
+                                        +20 POINTS ADDED
+                                    </div>
                                 {% endif %}
                             </div>
-                            
-                            {% if item.status == 'REJECTED' and item.rejection_reason %}
-                                <div class="mt-3 p-3 bg-red-50 border border-red-100 rounded-xl">
-                                    <p class="text-sm text-red-800"><span class="font-bold">Admin Feedback:</span> {{ item.rejection_reason }}</p>
-                                </div>
-                            {% endif %}
-                            
-                            {% if item.status == 'VERIFIED' %}
-                                <div class="mt-3 p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
-                                    <p class="text-sm text-emerald-800 font-medium">🎉 Verified! 20 points awarded to your account.</p>
-                                </div>
-                            {% endif %}
+
+                            <div class="shrink-0">
+                                {% if item.status == 'COLLECTED' %}
+                                    <div class="inline-flex items-center px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-black border border-blue-100">
+                                        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping mr-2"></span>
+                                        PENDING REVIEW
+                                    </div>
+                                {% elif item.status == 'VERIFIED' %}
+                                    <div class="inline-flex items-center px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-black border border-emerald-100">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                        SUCCESS
+                                    </div>
+                                {% elif item.status == 'REJECTED' %}
+                                    <div class="inline-flex items-center px-3 py-1.5 rounded-full bg-red-50 text-red-700 text-xs font-black border border-red-100">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        REJECTED
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                    <p class="text-gray-500 font-medium">You haven't submitted any collections for verification yet.</p>
+                <div class="text-center py-12 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+                    <p class="text-gray-400 font-bold italic">Your history is currently empty.</p>
                 </div>
             {% endif %}
         </div>
@@ -124,10 +189,73 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Format Textarea Global style
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach(el => {
-            el.classList.add('block', 'w-full', 'px-4', 'py-3', 'border', 'border-gray-200', 'rounded-xl', 'text-gray-900', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-500', 'focus:border-transparent', 'transition-shadow', 'shadow-sm', 'resize-none');
+            el.classList.add(
+                'block', 'w-full', 'px-4', 'py-3', 'bg-white', 'border', 
+                'border-gray-200', 'rounded-xl', 'text-gray-900', 'font-medium',
+                'placeholder-gray-400', 'focus:outline-none', 'focus:ring-2', 
+                'focus:ring-blue-500/20', 'focus:border-blue-500',
+                'transition-all', 'shadow-sm', 'resize-none'
+            );
+            el.placeholder = "Include any necessary verification details...";
+            el.rows = 2;
         });
+
+        // Add dynamic loader to collection button
+        const forms = document.querySelectorAll('.action-form');
+        forms.forEach(f => {
+            f.addEventListener('submit', function(e){
+                const btn = f.querySelector('.submit-action-btn');
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Submitting...`;
+            });
+        });
+
+        {% if my_collections %}
+            // Aggregate stats
+            const collections = [
+                {% for item in my_collections %}
+                    '{{ item.status }}',
+                {% endfor %}
+            ];
+
+            const statusCounts = collections.reduce((acc, curr) => {
+                acc[curr] = (acc[curr] || 0) + 1;
+                return acc;
+            }, { 'VERIFIED': 0, 'COLLECTED': 0, 'REJECTED': 0 });
+
+            const ctx = document.getElementById('collectorPerfChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [statusCounts['VERIFIED'], statusCounts['COLLECTED'], statusCounts['REJECTED']],
+                        backgroundColor: ['#10b981', '#3b82f6', '#ef4444'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = ['Verified', 'Pending Review', 'Rejected'];
+                                    return labels[context.dataIndex] + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        {% endif %}
     });
 </script>
+
 {% endblock %}
