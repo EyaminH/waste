@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - Waste Management{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Community Leaderboard</h2>
+            <div class="text-sm text-gray-500">Top 50 Contributors</div>
+        </div>
+
+        {% if top_users %}
+            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-emerald-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Rank</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">User</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
+                            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        {% for u in top_users %}
+                            <tr class="{% if u == user %}bg-emerald-50{% endif %}">
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium {% if forloop.counter <= 3 %}text-emerald-600 font-bold{% else %}text-gray-900{% endif %} sm:pl-6">
+                                    #{{ forloop.counter }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ u.username }}
+                                    {% if u == user %}
+                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">You</span>
+                                    {% endif %}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ u.get_role_display }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-right font-semibold text-gray-900">
+                                    {{ u.points }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <p class="text-gray-500 italic">No points have been awarded yet. Be the first to contribute!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

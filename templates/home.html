@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                AI Agentic Waste Management
+            </h1>
+            <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500">
+                Join our community to report, collect, and manage waste efficiently while earning points for your contributions to a cleaner environment.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-10">Waste Classification Gallery</h2>
+    
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Organic -->
+        <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-emerald-600">Organic</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Food scraps, yard waste, and other biodegradable materials. Proper composting reduces landfill methane emissions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plastic -->
+        <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-emerald-600">Plastic</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Bottles, containers, and packaging. Recycling plastic prevents microplastic pollution in our oceans and soil.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metal -->
+        <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-emerald-600">Metal</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Cans, foil, and scrap metal. Recycling metals saves significant energy compared to mining raw materials.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- E-Waste -->
+        <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-emerald-600">E-Waste</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Electronics, batteries, and appliances. Special handling prevents toxic heavy metals from leaching into groundwater.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hazardous -->
+        <div class="bg-white overflow-hidden shadow rounded-lg border border-gray-200">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-emerald-600">Hazardous</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Chemicals, paint, and medical waste. Requires professional disposal to prevent severe environmental and health risks.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
